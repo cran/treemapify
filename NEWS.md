@@ -1,3 +1,21 @@
+# v2.5.1
+
+## Major changes
+
+- Added new `layout` and `start` arguments to `treemapify()` and all geoms
+
+## Minor changes
+
+- Restore `xlim` and `ylim` options to `treemapify()`
+- Add and improve tests
+- Misc. code quality improvements
+
+## Bug fixes
+
+- Fixed bug in handling of subgroups, which should result in more aesthetically pleasing layouts
+- Fix dereferencing of arguments in `treemapify()` (#22, thanks @GregorDeCillia)
+- Fix deprecation of `fill`, `label` and `group` arguments in `treemapify()` to maintain backwards compatibility (thanks @GregorDeCillia)
+
 # v2.5.0
 
 ## Major changes
