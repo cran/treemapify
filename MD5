@@ -1,11 +1,11 @@
-c2c0ad1e22beb7a2add81e796320272f *DESCRIPTION
-4de0c5431c88d8dcbfc27d299dfc36fd *NAMESPACE
-8b6e708e83725fec06859f0be29c9f73 *NEWS.md
+7cf8d952c3545b35ebcff44392bb5012 *DESCRIPTION
+c7efd6c7766fbc8eec1c03ca05669329 *NAMESPACE
+f5567e084997ba79345425cd3717cd28 *NEWS.md
 e150504a3fcea230a07dcd523fa70be3 *R/data.R
 4d97de5d171eac5e3dab83878eb83907 *R/geom_treemap.R
 c7484adf45bd9519d227a904765a6673 *R/geom_treemap_subgroup_border.R
-84ddf105714653fa5739cccd63361d86 *R/geom_treemap_subgroup_text.R
-b2cf9c14977fa0ba31eb7fe2097bb4c8 *R/geom_treemap_text.R
+65ca0b05e9fcdfe2e95f30edfc3ec20d *R/geom_treemap_subgroup_text.R
+2cfaf675ff17881f68056fab6074daf6 *R/geom_treemap_text.R
 39d65a4cf3610bd720ffe494ffbfe404 *R/ggplotify.R
 dccdc8f119efc23a94ea09cf58d86a37 *R/treemap_fixed.R
 8b72035dbe71480dc7b5302dd3c43dda *R/treemap_squarified.R
@@ -15,7 +15,7 @@ d9737b8e9ba94fa26e159b3303aa6f16 *README.md
 18c149f6b292f10b74bdd013bfdd515f *data/G20.rda
 58c41b51764919b1306a33b2abebc405 *inst/doc/introduction-to-treemapify.R
 e104b03e038b644163193ca8ba11819e *inst/doc/introduction-to-treemapify.Rmd
-7ecfdb83863afc47cfbe4c586562a1cb *inst/doc/introduction-to-treemapify.html
+46d062b1af7c4cb4396c66cd12e8f648 *inst/doc/introduction-to-treemapify.html
 a65b3e8da1ee1a0c5e75518d929d6b82 *man/G20.Rd
 701bae33da14176bd780c6416bce7126 *man/figures/README-basic_treemap-1.png
 3526faab5e4ec019c53cdd70b63adfb2 *man/figures/README-complex_treemap-1.png

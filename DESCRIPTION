@@ -1,6 +1,6 @@
 Package: treemapify
 Title: Draw Treemaps in 'ggplot2'
-Version: 2.5.1
+Version: 2.5.2
 Author: David Wilkins <david@wilkox.org>
 Maintainer: David Wilkins <david@wilkox.org>
 URL: https://github.com/wilkox/treemapify
@@ -15,6 +15,6 @@ RoxygenNote: 6.1.0
 VignetteBuilder: knitr
 Encoding: UTF-8
 NeedsCompilation: no
-Packaged: 2018-10-06 07:49:51 UTC; wilkox
+Packaged: 2018-10-13 22:27:55 UTC; wilkox
 Repository: CRAN
-Date/Publication: 2018-10-06 08:10:02 UTC
+Date/Publication: 2018-10-13 22:50:02 UTC

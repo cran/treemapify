@@ -1,3 +1,9 @@
+# v2.5.2
+
+## Bug fixes
+
+- Fix issue with importing ggfittext
+
 # v2.5.1
 
 ## Major changes
