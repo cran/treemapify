@@ -2,13 +2,16 @@
 [![Travis-CI Build
 Status](https://travis-ci.org/wilkox/treemapify.svg?branch=master)](https://travis-ci.org/wilkox/treemapify)
 [![CRAN\_Status\_Badge](http://www.r-pkg.org/badges/version/treemapify)](https://cran.r-project.org/package=treemapify)
+[![lifecycle](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://www.tidyverse.org/lifecycle/#stable)
 
-**‘treemapify’ provides ‘ggplot2’ geoms for drawing
-[treemaps](http://en.wikipedia.org/wiki/Treemap).**
+# treemapify
+
+treemapify provides [ggplot2](https://ggplot2.tidyverse.org) geoms for
+drawing [treemaps](https://en.wikipedia.org/wiki/Treemap).
 
 ## Installation
 
-Install the release version of ‘treemapify’ from CRAN:
+Install the release version of treemapify from CRAN:
 
 `install.packages("treemapify")`
 
@@ -18,7 +21,7 @@ If you want the development version, install it from GitHub:
 
 ## The G20 dataset
 
-‘treemapify’ includes an example dataset containing statistics about the
+treemapify includes an example dataset containing statistics about the
 G-20 group of major world economies.
 
 ``` r
@@ -75,8 +78,8 @@ In a treemap, each tile represents a single observation, with the area
 of the tile proportional to a variable. Let’s start by drawing a treemap
 with each tile representing a G-20 country. The area of the tile will be
 mapped to the country’s GDP, and the tile’s fill colour mapped to its
-HDI (Human Development Index). `geom_treemap` is the basic geom for this
-purpose.
+HDI (Human Development Index). `geom_treemap()` is the basic geom for
+this purpose.
 
 ``` r
 ggplot(G20, aes(area = gdp_mil_usd, fill = hdi)) +
@@ -86,15 +89,15 @@ ggplot(G20, aes(area = gdp_mil_usd, fill = hdi)) +
 ![](man/figures/README-basic_treemap-1.png)<!-- -->
 
 This plot isn’t very useful without the knowing what country is
-represented by each tile. `geom_treemap_text` can be used to add a text
-label to each tile. It uses the
-[‘ggfittext’](https://github.com/wilkox/ggfittext) package to resize
-the text so it fits the tile. In addition to standard text formatting
-aesthetics you would use in `geom_text`, like `fontface` or `colour`, we
-can pass additional options specific for ‘ggfittext’. For example, we
+represented by each tile. `geom_treemap_text()` can be used to add a
+text label to each tile. It uses the
+[ggfittext](https://github.com/wilkox/ggfittext) package to resize the
+text so it fits the tile. In addition to standard text formatting
+aesthetics you would use in `geom_text()`, like `fontface` or `colour`,
+we can pass additional options specific for ggfittext. For example, we
 can place the text in the centre of the tile with `place = "centre"`,
-and expand it to fill as much of the tile as possible with `grow =
-TRUE`.
+and expand it to fill as much of the tile as possible with
+`grow = TRUE`.
 
 ``` r
 ggplot(G20, aes(area = gdp_mil_usd, fill = hdi, label = country)) +
@@ -107,12 +110,12 @@ ggplot(G20, aes(area = gdp_mil_usd, fill = hdi, label = country)) +
 
 ## Subgrouping tiles
 
-`geom_treemap` supports subgrouping of tiles within a treemap by passing
-a `subgroup` aesthetic. Let’s subgroup the countries by region, draw a
-border around each subgroup with `geom_treemap_subgroup_border`, and
-label each subgroup with `geom_treemap_subgroup_text`.
-`geom_treemap_subgroup_text` takes the same arguments for text placement
-and resizing as `geom_treemap_text`.
+`geom_treemap()` supports subgrouping of tiles within a treemap by
+passing a `subgroup` aesthetic. Let’s subgroup the countries by region,
+draw a border around each subgroup with
+`geom_treemap_subgroup_border()`, and label each subgroup with
+`geom_treemap_subgroup_text()`. `geom_treemap_subgroup_text()` takes the
+same arguments for text placement and resizing as `geom_treemap_text()`.
 
 ``` r
 ggplot(G20, aes(area = gdp_mil_usd, fill = hdi, label = country,
@@ -126,19 +129,20 @@ ggplot(G20, aes(area = gdp_mil_usd, fill = hdi, label = country,
 
 ![](man/figures/README-subgrouped_treemap-1.png)<!-- -->
 
-Note that Argentina is not labelled. `geom_treemap_text` will hide text
-labels that cannot fit a tile without being shrunk below a minimum size,
-by default 4 points. This can be adjusted with the `min.size` argument.
+Note that Argentina is not labelled. `geom_treemap_text()` will hide
+text labels that cannot fit a tile without being shrunk below a minimum
+size, by default 4 points. This can be adjusted with the `min.size`
+argument.
 
 Up to three nested levels of subgrouping are supported with the
 `subgroup2` and `subgroup3` aesthetics. Borders and text labels for
-these subgroups can be drawn with `geom_treemap_subgroup2_border`, etc.
-Note that ‘ggplot2’ draws plot layers in the order that they are added.
-This means it is possible to accidentally hide one layer of subgroup
-borders with another. Usually, it’s best to add the border layers in
-order from deepest to shallowest, i.e. `geom_treemap_subgroup3_border`
-then `geom_treemap_subgroup2_border` then
-`geom_treemap_subgroup_border`.
+these subgroups can be drawn with `geom_treemap_subgroup2_border()`,
+etc. Note that ggplot2 draws plot layers in the order that they are
+added. This means it is possible to accidentally hide one layer of
+subgroup borders with another. Usually, it’s best to add the border
+layers in order from deepest to shallowest, i.e.
+`geom_treemap_subgroup3_border()` then `geom_treemap_subgroup2_border()`
+then `geom_treemap_subgroup_border()`.
 
 ``` r
 ggplot(G20, aes(area = 1, label = country, subgroup = hemisphere,
@@ -158,8 +162,7 @@ ggplot(G20, aes(area = 1, label = country, subgroup = hemisphere,
 As demonstrated, there is no assurance that the resulting plot will look
 good.
 
-Like any ‘ggplot2’ plot, ‘treemapify’ plots can be faceted, scaled,
-themed,
+Like any ggplot2 plot, treemapify plots can be faceted, scaled, themed,
 etc.
 
 ``` r
@@ -189,43 +192,37 @@ of tiles within the plot area can change dramatically with even small
 changes to the dataset. This makes it difficult to compare treemaps
 side-by-side, or create animated treemaps.
 
-By providing the `layout = "fixed"` option to ‘treemapify’ geoms, an
+By providing the `layout = "fixed"` option to treemapify geoms, an
 alternative layout algorithm is used that will always position the tiles
 based on the order of observations in the data frame. It’s very
-important that the same value for `layout` is passed to all ‘treemapify’
+important that the same value for `layout` is passed to all treemapify
 geoms, otherwise different layers of the plot might not share the same
 layout.
 
 With the help of `layout = "fixed"`, and with the
-[`tweenr`](https://github.com/thomasp85/tweenr) and
-[`gganimate`](https://github.com/dgrtwo/gganimate) packages, it becomes
-possible to create animated treemaps showing e.g. change over time.
+[`gganimate`](https://github.com/thomasp85/gganimate) package, it
+becomes possible to create animated treemaps showing e.g. change over
+time.
 
 ``` r
-library(tweenr)
 library(gganimate)
+library(gapminder)
 
-G20_alt <- G20
-set.seed(1)
-G20_alt$gdp_mil_usd <- sample(G20$gdp_mil_usd, nrow(G20))
-G20_alt$hdi <- sample(G20$hdi, nrow(G20))
-
-tweened <- tween_states(list(G20, G20_alt, G20), tweenlength = 8,
-                        statelength = 5, ease = 'cubic-in-out', nframes = 31)
-
-animated_plot <- ggplot(tweened, aes(area = gdp_mil_usd, fill = hdi,
-                                     label = country, subgroup = region,
-                                     frame = .frame)) +
+p <- ggplot(gapminder, aes(
+    label = country,
+    area = pop,
+    subgroup = continent,
+    fill = lifeExp
+  )) +
   geom_treemap(layout = "fixed") +
+  geom_treemap_text(layout = "fixed", place = "centre", grow = TRUE, colour = "white") +
+  geom_treemap_subgroup_text(layout = "fixed", place = "centre") +
   geom_treemap_subgroup_border(layout = "fixed") +
-  geom_treemap_subgroup_text(place = "centre", grow = T, alpha = 0.5,
-                             colour = "black", fontface = "italic", min.size = 0,
-                             layout = "fixed") +
-  geom_treemap_text(colour = "white", place = "topleft", reflow = T, layout = "fixed")
+  transition_time(year) +
+  ease_aes('linear') +
+  labs(title = "Year: {frame_time}")
 
-animation::ani.options(interval = 1/10)
-gganimate(animated_plot, "man/figures/animated_treemap.gif", title_frame = F,
-          ani.width = 200, ani.height = 200)
+anim_save("man/figures/animated_treemap.gif", p, nframes = 48)
 ```
 
-![animated\_treemap](man/figures/animated_treemap.gif)
+![An example of an animated treemap](man/figures/animated_treemap.gif)

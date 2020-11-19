@@ -4,18 +4,18 @@
 #' a single observation. The relative area of each tile expresses a continuous
 #' variable.
 #'
-#' `geom_treemap` requires an `area` aesthetic. It will ignore any aesthetics
+#' `geom_treemap()` requires an `area` aesthetic. It will ignore any aesthetics
 #' relating to the x and y axes (e.g. `xmin` or `y`), as the x and y axes are
 #' not meaningful in a treemap. Several other standard 'ggplot2' aesthetics are
 #' supported (see Aesthetics). To add text labels to tiles, see
-#' `geom_treemap_text`.
+#' `geom_treemap_text()`.
 #'
 #' An optional `subgroup` aesthetic will cause the tiles to be clustered in
-#' subgroups within the treemap. See `geom_treemap_subgroup_border` and
-#' `geom_treemap_subgroup_text` to draw borders around subgroups and label
+#' subgroups within the treemap. See `geom_treemap_subgroup_border()` and
+#' `geom_treemap_subgroup_text()` to draw borders around subgroups and label
 #' them, respectively. Up to three nested levels of subgrouping are supported,
 #' with `subgroup2` and `subgroup3` aesthetics and respective
-#' `geom_treemap_subgroup2_border` etc. geoms.
+#' `geom_treemap_subgroup2_border()` etc. geoms.
 #'
 #' Four layout algorithms are provided. With the default 'squarified' algorithm
 #' (`layout = "squarified"`), the priority is ensuring the tiles have an
@@ -38,46 +38,48 @@
 #' aesthetically unpleasing layouts, but it allows side-by-side comparisons or
 #' animations to be created.
 #'
-#' All `treemapify` geoms added to a plot should have the same value for
+#' All 'treemapify' geoms added to a plot should have the same value for
 #' `layout` and `start`, or they will not share a common layout.
 #'
 #' @section Aesthetics:
 #'
-#' \itemize{
-#'   \item area (required)
-#'   \item alpha
-#'   \item colour
-#'   \item fill
-#'   \item linetype
-#'   \item subgroup
-#'   \item subgroup2
-#'   \item subgroup3
-#' }
+#' - area (required)
+#' - alpha
+#' - colour
+#' - fill
+#' - linetype
+#' - subgroup
+#' - subgroup2
+#' - subgroup3
 #'
 #' @param mapping,data,stat,position,na.rm,show.legend,inherit.aes,... Standard
-#' geom arguments as for `ggplot2::geom_rect`.
-#' @param layout The layout algorithm, one of either "squarified" (the
-#' default), "scol", "srow" or "fixed". See Details for full details on the
+#' geom arguments as for `ggplot2::geom_rect()`.
+#' @param layout The layout algorithm, one of either 'squarified' (the
+#' default), 'scol', 'srow' or 'fixed'. See Details for full details on the
 #' different layout algorithms.
 #' @param start The corner in which to start placing the tiles. One of
 #' 'bottomleft' (the default), 'topleft', 'topright' or 'bottomright'.
 #' @param fixed Deprecated. Use `layout = "fixed"` instead. Will be removed in
 #' later versions.
+#' @param radius corner radius (default 0pt)
 #'
-#' @seealso geom_treemap_text, geom_treemap_subgroup_border,
-#' geom_treemap_subgroup_text
+#' @seealso [geom_treemap_text()], [geom_treemap_subgroup_border()],
+#' [geom_treemap_subgroup_text()]
 #'
 #' @references
 #'
 #' Bruls, M., Huizing, K., & van Wijk, J. (1999). Squarified Treemaps (pp.
 #' 33-42). Proceedings of the Joint Eurographics and IEEE TCVG Symposium on
-#' Visualization. \url{http://www.win.tue.nl/~vanwijk/stm.pdf}
+#' Visualization. <http://www.win.tue.nl/~vanwijk/stm.pdf>
 #'
 #' @examples
 #'
 #' ggplot2::ggplot(G20, ggplot2::aes(area = gdp_mil_usd, fill = region)) +
 #'  geom_treemap()
 #'
+#' @importFrom ggplot2 alpha
+#' @author David Wilkins (david@@wilkox.org)
+#' @author Bob Rudis (bob@@rud.is)
 #' @export
 geom_treemap <- function(
   mapping = NULL,
@@ -90,6 +92,7 @@ geom_treemap <- function(
   fixed = NULL,
   layout = "squarified",
   start = "bottomleft",
+  radius = grid::unit(0, "pt"),
   ...
 ) {
   ggplot2::layer(
@@ -105,7 +108,33 @@ geom_treemap <- function(
       fixed = fixed,
       layout = layout,
       start = start,
+      radius = radius,
       ...
+    )
+  )
+}
+
+
+#' Round rect key glyph for legend
+#'
+#' @param data A single row data frame containing the scaled aesthetics to display in this key
+#' @param params A list of additional parameters supplied to the geom.
+#' @param size Width and height of key in mm.
+#' @importFrom grid roundrectGrob
+#' @author Bob Rudis (bob@@rud.is)
+#' @export
+draw_key_rrect <- function(data, params, size) {
+
+  grid::roundrectGrob(
+    r = min(params$radius, unit(3, "pt")),
+    default.units = "native",
+    width = 0.9,
+    height = 0.9,
+    name = "lkey",
+    gp = grid::gpar(
+      col = params$color %l0% "white",
+      fill = alpha(data$fill %||% data$colour %||% "grey20", data$alpha),
+      lty = data$linetype %||% 1
     )
   )
 }
@@ -123,7 +152,8 @@ GeomTreemap <- ggplot2::ggproto(
     linetype = 1,
     alpha = 1
   ),
-  draw_key = ggplot2::draw_key_rect,
+
+  draw_key = draw_key_rrect,
 
   draw_panel = function(
     data,
@@ -131,7 +161,8 @@ GeomTreemap <- ggplot2::ggproto(
     coord,
     fixed = NULL,
     layout = "squarified",
-    start = "bottomleft"
+    start = "bottomleft",
+    radius = grid::unit(3, "pt")
   ) {
 
     data <- coord$transform(data, panel_scales)
@@ -149,23 +180,31 @@ GeomTreemap <- ggplot2::ggproto(
     }
     data <- do.call(treemapify, tparams)
 
-    # Draw rects
-    grob <- grid::rectGrob(
-      x = data$xmin,
-      width = data$xmax - data$xmin,
-      y = data$ymax,
-      height = data$ymax - data$ymin,
-      default.units = "native",
-      just = c("left", "top"),
-      gp = grid::gpar(
-        col = data$colour,
-        fill = ggplot2::alpha(data$fill, data$alpha),
-        lwd = data$size,
-        lty = data$linetype,
-        lineend = "butt"
+    lapply(1:length(data$xmin), function(i) {
+
+      grid::roundrectGrob(
+        x = data$xmin[i],
+        width = data$xmax[i] - data$xmin[i],
+        y = data$ymax[i],
+        height = data$ymax[i] - data$ymin[i],
+        default.units = "native",
+        r = radius,
+        just = c("left", "top"),
+        gp = grid::gpar(
+          col = data$colour[i],
+          fill = ggplot2::alpha(data$fill[i], data$alpha[i]),
+          lwd = data$size[i],
+          lty = data$linetype[i]
+          # lineend = "butt"
+        )
       )
-    )
-    grob$name <- grid::grobName(grob, "geom_treemap")
-    grob
+
+    }) -> gl
+
+    grobs <- do.call(grid::gList, gl)
+
+    ggname("geom_treemap", grid::grobTree(children = grobs))
+
   }
+
 )

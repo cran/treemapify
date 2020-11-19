@@ -1,19 +1,19 @@
-## ----message = FALSE-----------------------------------------------------
+## ----message = FALSE----------------------------------------------------------
 library(ggplot2)
 library(treemapify)
 G20
 
-## ----basic_treemap-------------------------------------------------------
+## ----basic_treemap------------------------------------------------------------
 ggplot(G20, aes(area = gdp_mil_usd, fill = hdi)) +
   geom_treemap()
 
-## ----geom_treemap_text---------------------------------------------------
+## ----geom_treemap_text--------------------------------------------------------
 ggplot(G20, aes(area = gdp_mil_usd, fill = hdi, label = country)) +
   geom_treemap() +
   geom_treemap_text(fontface = "italic", colour = "white", place = "centre",
                     grow = TRUE)
 
-## ----subgrouped_treemap--------------------------------------------------
+## ----subgrouped_treemap-------------------------------------------------------
 ggplot(G20, aes(area = gdp_mil_usd, fill = hdi, label = country,
                 subgroup = region)) +
   geom_treemap() +
@@ -22,7 +22,7 @@ ggplot(G20, aes(area = gdp_mil_usd, fill = hdi, label = country,
                              "black", fontface = "italic", min.size = 0) +
   geom_treemap_text(colour = "white", place = "topleft", reflow = T)
 
-## ----multiple_subgrouped_treemap-----------------------------------------
+## ----many_subgroups-----------------------------------------------------------
 ggplot(G20, aes(area = 1, label = country, subgroup = hemisphere,
                 subgroup2 = region, subgroup3 = econ_classification)) +
   geom_treemap() +
