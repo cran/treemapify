@@ -70,7 +70,7 @@
 #'
 #' Bruls, M., Huizing, K., & van Wijk, J. (1999). Squarified Treemaps (pp.
 #' 33-42). Proceedings of the Joint Eurographics and IEEE TCVG Symposium on
-#' Visualization. <http://www.win.tue.nl/~vanwijk/stm.pdf>
+#' Visualization. <https://www.win.tue.nl/~vanwijk/stm.pdf>
 #'
 #' @examples
 #'
@@ -117,7 +117,8 @@ geom_treemap <- function(
 
 #' Round rect key glyph for legend
 #'
-#' @param data A single row data frame containing the scaled aesthetics to display in this key
+#' @param data A single row data frame containing the scaled aesthetics to
+#' display in this key
 #' @param params A list of additional parameters supplied to the geom.
 #' @param size Width and height of key in mm.
 #' @importFrom grid roundrectGrob
@@ -132,7 +133,7 @@ draw_key_rrect <- function(data, params, size) {
     height = 0.9,
     name = "lkey",
     gp = grid::gpar(
-      col = params$color %l0% "white",
+      col = data$colour %l0% "white",
       fill = alpha(data$fill %||% data$colour %||% "grey20", data$alpha),
       lty = data$linetype %||% 1
     )
@@ -180,7 +181,7 @@ GeomTreemap <- ggplot2::ggproto(
     }
     data <- do.call(treemapify, tparams)
 
-    lapply(1:length(data$xmin), function(i) {
+    lapply(seq_along(data$xmin), function(i) {
 
       grid::roundrectGrob(
         x = data$xmin[i],

@@ -1,3 +1,16 @@
+# treemapify 2.5.6
+
+## Minor changes
+
+- Replace `i:j` with `seq_along()` or similar
+- Update testing and continuous integration infrastructure
+- Small documentation updates
+- Use the cli package for errors and warnings
+
+## Bug fixes
+
+- Fix colour aesthetic in key for `geom_tremap()` (#47, thanks @jjbuonocore)
+
 # treemapify 2.5.5
 
 ## Bug fixes

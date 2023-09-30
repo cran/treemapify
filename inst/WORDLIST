@@ -1,4 +1,5 @@
 Bruls
+CMD
 Eurographics
 HDI
 Huizing
@@ -11,6 +12,7 @@ bottomleft
 bottomright
 center
 ci
+cli
 david
 etc
 fontface
