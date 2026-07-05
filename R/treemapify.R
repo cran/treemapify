@@ -63,6 +63,22 @@
 #' Must be a numeric vector of length two; both default to `c(0, 1)`.
 #' @param ... Additional arguments to be passed to `treemapify()`.
 #'
+#' @return A data frame with one row per tile. All columns from `data` are
+#' retained (including `area`, with its original values), plus four columns
+#' giving the tile boundaries: `xmin`, `xmax`, `ymin` and `ymax`. These
+#' coordinates fall within the `xlim` and `ylim` limits.
+#'
+#' Note the following behaviours of the returned layout:
+#'
+#' - Rows with a missing (`NA`) `area` value are dropped, with a warning.
+#' - Rows with a zero or negative `area` value are silently dropped, as they
+#'   cannot be given a tile.
+#' - If every row has a zero or negative `area` value, an error is raised.
+#' - Row order is not necessarily preserved. The 'squarified' layouts
+#'   (`squarified`, `scol` and `srow`) sort the tiles by area, largest first,
+#'   so the returned rows will not match the order of `data`. The 'fixed'
+#'   layout does preserve the input row order.
+#'
 #' @seealso [geom_treemap()]
 #'
 #' @examples
@@ -137,6 +153,9 @@ treemapify <- function(
   if (!layout %in% c("squarified", "scol", "srow", "fixed")) {
     cli::cli_abort("Invalid value for {.arg layout}")
   }
+  if (!start %in% c("bottomleft", "topleft", "topright", "bottomright")) {
+    cli::cli_abort("Invalid value for {.arg start}")
+  }
   if (!(is.numeric(xlim) & length(xlim) == 2 & xlim[1] < xlim[2])) {
     cli::cli_abort(
       "{.arg xlim} must be a numeric vector of length 2, with the minimum less than the maximum"
@@ -146,6 +165,15 @@ treemapify <- function(
     cli::cli_abort(
       "{.arg ylim} must be a numeric vector of length 2, with the minimum less than the maximum"
     )
+  }
+
+  # Drop rows with a missing area, which cannot be laid out
+  n_missing <- sum(is.na(data[[area]]))
+  if (n_missing > 0) {
+    cli::cli_warn(
+      "Dropping {n_missing} row{?s} with a missing {.field {area}} value."
+    )
+    data <- data[!is.na(data[[area]]), ]
   }
 
   # Set layout function
@@ -223,24 +251,26 @@ treemapify <- function(
   }
   layout <- do_layout(data, subgroups, xlim, ylim)
 
-  # Flip the coordinates to set the starting corner
+  # Flip the coordinates to set the starting corner. The tiles are reflected
+  # around the midpoint of the limits (e.g. `xlim[1] + xlim[2] - x`) so that
+  # they stay within the requested `xlim`/`ylim`.
   if (start == "topleft") {
-    new_ymax <- max(layout$ymax) - layout$ymin
-    new_ymin <- max(layout$ymax) - layout$ymax
+    new_ymax <- ylim[1] + ylim[2] - layout$ymin
+    new_ymin <- ylim[1] + ylim[2] - layout$ymax
     layout$ymax <- new_ymax
     layout$ymin <- new_ymin
   } else if (start == "topright") {
-    new_ymax <- max(layout$ymax) - layout$ymin
-    new_ymin <- max(layout$ymax) - layout$ymax
+    new_ymax <- ylim[1] + ylim[2] - layout$ymin
+    new_ymin <- ylim[1] + ylim[2] - layout$ymax
     layout$ymax <- new_ymax
     layout$ymin <- new_ymin
-    new_xmax <- max(layout$xmax) - layout$xmin
-    new_xmin <- max(layout$xmax) - layout$xmax
+    new_xmax <- xlim[1] + xlim[2] - layout$xmin
+    new_xmin <- xlim[1] + xlim[2] - layout$xmax
     layout$xmax <- new_xmax
     layout$xmin <- new_xmin
   } else if (start == "bottomright") {
-    new_xmax <- max(layout$xmax) - layout$xmin
-    new_xmin <- max(layout$xmax) - layout$xmax
+    new_xmax <- xlim[1] + xlim[2] - layout$xmin
+    new_xmin <- xlim[1] + xlim[2] - layout$xmax
     layout$xmax <- new_xmax
     layout$xmin <- new_xmin
   }

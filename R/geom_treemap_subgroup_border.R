@@ -59,7 +59,7 @@ geom_treemap_subgroup_border <- function(
   stat = "identity",
   position = "identity",
   na.rm = FALSE,
-  show.legend = NA,
+  show.legend = FALSE,
   inherit.aes = TRUE,
   fixed = NULL,
   layout = "squarified",
@@ -127,10 +127,11 @@ GeomSubgroupBorder <- ggplot2::ggproto(
     bys <- lapply(levels, function(x) data[[x]])
     areasums <- aggregate(data$area, by = bys, FUN = sum)
     names(areasums) <- c(levels, "area")
+    row_key <- interaction(bys, drop = TRUE)
+    group_key <- interaction(areasums[levels], drop = TRUE)
+    first_rows <- match(group_key, row_key)
     aesthetics <- c("colour", "size", "linetype", "alpha")
-    for (aesthetic in aesthetics) {
-      areasums[aesthetic] <- unique(data[[aesthetic]])
-    }
+    areasums[aesthetics] <- data[first_rows, aesthetics]
     data <- areasums
 
     # Generate treemap layout for data

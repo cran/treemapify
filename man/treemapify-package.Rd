@@ -11,12 +11,18 @@ Provides 'ggplot2' geoms for drawing treemaps.
 Useful links:
 \itemize{
   \item \url{https://wilkox.org/treemapify/}
+  \item \url{http://wilkox.org/treemapify/}
   \item Report bugs at \url{https://github.com/wilkox/treemapify/issues/}
 }
 
 }
 \author{
 \strong{Maintainer}: David Wilkins \email{david@wilkox.org} (\href{https://orcid.org/0000-0002-3385-8981}{ORCID})
+
+Authors:
+\itemize{
+  \item David Wilkins \email{david@wilkox.org} (\href{https://orcid.org/0000-0002-3385-8981}{ORCID})
+}
 
 Other contributors:
 \itemize{
